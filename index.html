@@ -9,7 +9,6 @@
 :root{
   --pink:#ff4d8d;
   --gold:#d4af37;
-  --white:#ffffff;
 }
 
 body{
@@ -39,7 +38,7 @@ header{
   background:white;
   border-radius:14px;
   overflow:hidden;
-  box-shadow:0 6px 15px rgba(0,0,0,0.1);
+  box-shadow:0 5px 12px rgba(0,0,0,0.1);
 }
 
 .card img{
@@ -67,7 +66,7 @@ header{
   font-weight:bold;
 }
 
-/* CART BUTTON */
+/* CART */
 .cart-btn{
   position:fixed;
   bottom:18px;
@@ -77,9 +76,9 @@ header{
   padding:14px;
   border-radius:50px;
   font-weight:bold;
+  box-shadow:0 6px 15px rgba(0,0,0,0.2);
 }
 
-/* PANEL */
 .panel{
   position:fixed;
   bottom:0;
@@ -117,83 +116,17 @@ header{
   text-decoration:none;
   border-radius:10px;
 }
-
-/* LOGIN */
-.login{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(135deg,var(--pink),var(--gold));
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  color:white;
-}
-
-.login input{
-  padding:10px;
-  margin:5px;
-  width:220px;
-  border:none;
-  border-radius:10px;
-}
-
-.login button{
-  width:220px;
-  padding:10px;
-  border:none;
-  background:white;
-  font-weight:bold;
-}
-
-/* ADMIN */
-.admin{
-  padding:10px;
-  background:white;
-  margin:10px;
-  border-radius:12px;
-}
-.admin input{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-}
-.admin button{
-  width:100%;
-  padding:10px;
-  background:var(--gold);
-  border:none;
-  font-weight:bold;
-}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div class="login" id="login">
-  <h2>🌸 Lilith Bloms</h2>
-  <input id="email" placeholder="Email">
-  <input id="pass" type="password" placeholder="Password">
-  <button onclick="login()">Entrar</button>
-</div>
-
 <header>
-🌸✨ LILITH BLOMS — Flores de Limpiapipas 💖
+🌸 Lilith Bloms — Flores de Limpiapipas 💖✨
 </header>
 
-<!-- ADMIN -->
-<div class="admin">
-  <h3>🧑‍💼 Admin Panel</h3>
-  <input id="name" placeholder="Nombre flor">
-  <input id="price" placeholder="Precio RD$">
-  <button onclick="addProduct()">Agregar producto</button>
-</div>
-
-<!-- PRODUCTOS -->
 <div class="container" id="grid"></div>
 
-<!-- CART -->
 <div class="cart-btn" onclick="toggleCart()">
 🛒 <span id="count">0</span>
 </div>
@@ -202,115 +135,86 @@ header{
 <h3>Tu carrito</h3>
 <div id="cart"></div>
 <div class="total" id="total"></div>
-<a class="checkout" id="checkout" target="_blank">Pagar / WhatsApp</a>
+<a class="checkout" id="wa" target="_blank">Enviar pedido por WhatsApp</a>
 </div>
 
-<script type="module">
+<script>
 
-/* 🔥 FIREBASE */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "TU_FIREBASE",
-  authDomain: "TU_FIREBASE",
-  projectId: "TU_FIREBASE"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const products = [
+  {name:"Rosas de limpiapipas rosadas", price:350},
+  {name:"Girasol artesanal dorado", price:450},
+  {name:"Bouquet romántico premium", price:600},
+  {name:"Caja deluxe Lilith Bloms", price:800},
+  {name:"Ramo especial edición oro", price:950}
+];
 
 let cart = [];
-let products = [];
 
-/* LOGIN */
-window.login = async ()=>{
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("pass").value;
-
-  await signInWithEmailAndPassword(auth, email, pass);
-};
-
-onAuthStateChanged(auth, user=>{
-  if(user){
-    document.getElementById("login").style.display="none";
-    loadProducts();
-  }
-});
-
-/* ADMIN ADD */
-window.addProduct = async ()=>{
-  const name = document.getElementById("name").value;
-  const price = document.getElementById("price").value;
-
-  await addDoc(collection(db,"products"),{
-    name,
-    price
-  });
-
-  loadProducts();
-};
-
-/* LOAD */
-async function loadProducts(){
-  const snap = await getDocs(collection(db,"products"));
+/* RENDER PRODUCTOS */
+function render(){
   const grid = document.getElementById("grid");
   grid.innerHTML="";
-  products = [];
 
-  snap.forEach(d=>{
-    const p = d.data();
-    products.push(p);
-
+  products.forEach((p,i)=>{
     grid.innerHTML += `
       <div class="card">
         <img src="https://source.unsplash.com/300x200/?flowers,pink,gold" />
         <h3>${p.name}</h3>
         <p>RD$ ${p.price}</p>
-        <button onclick='add("${p.name}",${p.price})'>Agregar</button>
+        <button onclick="add(${i})">Agregar</button>
       </div>
     `;
   });
+
+  update();
 }
 
-/* CART */
-window.add = (name, price)=>{
-  cart.push({name,price});
-  renderCart();
-};
+/* AGREGAR */
+function add(i){
+  cart.push(products[i]);
+  update();
+}
 
-function renderCart(){
-  let total = 0;
+/* UPDATE CARRITO */
+function update(){
+
+  document.getElementById("count").innerText = cart.length;
+
   let html = "";
+  let total = 0;
 
   cart.forEach(c=>{
-    total += Number(c.price);
-    html += `<div class="item">
-      <span>${c.name}</span>
-      <span>RD$${c.price}</span>
-    </div>`;
+    total += c.price;
+    html += `
+      <div class="item">
+        <span>${c.name}</span>
+        <span>RD$${c.price}</span>
+      </div>
+    `;
   });
 
   document.getElementById("cart").innerHTML = html;
-  document.getElementById("total").innerText = "Total: RD$"+total;
-  document.getElementById("count").innerText = cart.length;
+  document.getElementById("total").innerText = "Total: RD$ " + total;
 
-  let msg = "Hola quiero pedido Lilith Bloms:%0A";
+  let msg = "Hola, quiero este pedido de Lilith Bloms:%0A";
+
   cart.forEach(c=>{
-    msg += "- "+c.name+" RD$"+c.price+"%0A";
+    msg += "- " + c.name + " RD$" + c.price + "%0A";
   });
-  msg += "Total RD$"+total;
 
-  document.getElementById("checkout").href =
-    "https://wa.me/18091234567?text="+msg;
+  msg += "%0ATotal: RD$" + total;
+
+  document.getElementById("wa").href =
+    "https://wa.me/18091234567?text=" + msg;
 }
 
-window.toggleCart = ()=>{
-  const p = document.getElementById("panel");
-  p.style.display = p.style.display==="block"?"none":"block";
-};
+/* CART TOGGLE */
+function toggleCart(){
+  const panel = document.getElementById("panel");
+  panel.style.display = panel.style.display==="block"?"none":"block";
+}
+
+render();
 
 </script>
 
