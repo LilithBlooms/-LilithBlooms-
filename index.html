@@ -150,7 +150,7 @@ const products = [
 
 let cart = [];
 
-/* RENDER PRODUCTOS */
+/* RENDER */
 function render(){
   const grid = document.getElementById("grid");
   grid.innerHTML="";
@@ -169,13 +169,13 @@ function render(){
   update();
 }
 
-/* AGREGAR */
+/* AGREGAR AL CARRITO */
 function add(i){
   cart.push(products[i]);
   update();
 }
 
-/* UPDATE CARRITO */
+/* ACTUALIZAR CARRITO */
 function update(){
 
   document.getElementById("count").innerText = cart.length;
@@ -208,7 +208,7 @@ function update(){
     "https://wa.me/18091234567?text=" + msg;
 }
 
-/* CART TOGGLE */
+/* TOGGLE CART */
 function toggleCart(){
   const panel = document.getElementById("panel");
   panel.style.display = panel.style.display==="block"?"none":"block";
