@@ -1,159 +1,260 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flores de Limpiapipas 💐</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LilithBlooms 💐</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ffe6f0, #e6f7ff);
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ffe6f0;
+  overflow-x: hidden;
+}
 
-    header {
-      text-align: center;
-      padding: 20px;
-    }
+/* 🌸 fondo florecitas */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(#ff8fb1 2px, transparent 2px);
+  background-size: 40px 40px;
+  opacity: 0.15;
+  z-index: -1;
+}
 
-    header h1 {
-      color: #d63384;
-      margin-bottom: 5px;
-    }
+/* 🌷 NAV */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+}
 
-    .cart {
-      position: sticky;
-      top: 0;
-      background: white;
-      padding: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-    }
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #d63384;
+}
 
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
+/* 🌸 HERO */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+}
 
-    .card {
-      background: white;
-      border-radius: 15px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
+.hero h1 {
+  font-size: 3em;
+  margin: 0;
+  color: #d63384;
+}
 
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
+.hero p {
+  color: #555;
+}
 
-    button {
-      margin-top: 10px;
-      padding: 8px 12px;
-      border: none;
-      background: #d63384;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+/* 🌼 CATEGORÍAS */
+.categories {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px;
+}
 
-    button:hover {
-      background: #ad1f6a;
-    }
+.cat-btn {
+  padding: 10px 15px;
+  border: 2px solid #d63384;
+  border-radius: 30px;
+  background: transparent;
+  color: #d63384;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-    .cart-box {
-      background: white;
-      margin: 20px;
-      padding: 15px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
+.cat-btn:hover {
+  background: #d63384;
+  color: white;
+}
 
-    ul {
-      padding-left: 20px;
-    }
+/* 🛍️ PRODUCTOS */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
 
-    .btn-clear {
-      background: #333;
-    }
-  </style>
+.card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 15px;
+  text-align: center;
+}
+
+.price {
+  color: #d63384;
+  font-weight: bold;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #d63384;
+  color: white;
+  cursor: pointer;
+}
+
+/* 🛒 CART */
+.cart {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 280px;
+  height: 100%;
+  background: white;
+  box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+  padding: 15px;
+}
+
+.cart h2 {
+  color: #d63384;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.checkout {
+  width: 100%;
+  background: black;
+  margin-top: 10px;
+}
+</style>
 </head>
 
 <body>
 
-<header>
-  <h1>Flores de Limpiapipas 💐</h1>
-  <p>Catálogo artesanal hecho con amor</p>
-</header>
+<nav>
+  <div class="logo">🌸 LilithBlooms</div>
+  <div>🛒 <span id="count">0</span></div>
+</nav>
 
-<!-- CART TOP -->
-<div class="cart">
-  <strong>🛒 Carrito: <span id="count">0</span> productos</strong>
-  <button onclick="vaciar()">Vaciar carrito</button>
+<div class="hero">
+  <h1>Flores de Limpiapipas 💐</h1>
+  <p>Hechas a mano con amor y estilo minimalista</p>
 </div>
 
-<section class="container">
+<!-- 🌼 categorías -->
+<div class="categories">
+  <button class="cat-btn">🌸 Rosas</button>
+  <button class="cat-btn">🌼 Girasoles</button>
+  <button class="cat-btn">🤍 Lilies</button>
+  <button class="cat-btn">💐 Ramos</button>
+</div>
+
+<!-- 🛍️ productos -->
+<div class="container">
 
   <div class="card">
     <img src="https://images.unsplash.com/photo-1524594154900-1c0d6b4f1a7f">
-    <h3>Rosa artesanal</h3>
-    <button onclick="agregar('Rosa artesanal')">Agregar</button>
+    <div class="card-content">
+      <h3>Rosa de limpiapipas</h3>
+      <p class="price">$10</p>
+      <button onclick="add('Rosa',10)">Agregar</button>
+    </div>
   </div>
 
   <div class="card">
     <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6">
-    <h3>Girasol brillante</h3>
-    <button onclick="agregar('Girasol brillante')">Agregar</button>
+    <div class="card-content">
+      <h3>Girasol artesanal</h3>
+      <p class="price">$15</p>
+      <button onclick="add('Girasol',15)">Agregar</button>
+    </div>
   </div>
 
   <div class="card">
     <img src="https://images.unsplash.com/photo-1468327768560-75b778cbb551">
-    <h3>Lirio elegante</h3>
-    <button onclick="agregar('Lirio elegante')">Agregar</button>
+    <div class="card-content">
+      <h3>Lirio minimalista</h3>
+      <p class="price">$12</p>
+      <button onclick="add('Lirio',12)">Agregar</button>
+    </div>
   </div>
 
-</section>
+</div>
 
-<!-- CART LIST -->
-<div class="cart-box">
-  <h2>🧾 Productos en el carrito</h2>
-  <ul id="lista"></ul>
+<!-- 🛒 carrito -->
+<div class="cart">
+  <h2>Carrito 💖</h2>
+  <ul id="list"></ul>
+  <h3>Total: $<span id="total">0</span></h3>
+  <button class="checkout" onclick="pay()">Pagar 💳</button>
 </div>
 
 <script>
-  let carrito = [];
+let cart = [];
+let total = 0;
 
-  function agregar(producto) {
-    carrito.push(producto);
-    actualizar();
+function add(name, price) {
+  cart.push({name, price});
+  total += price;
+  render();
+}
+
+function render() {
+  document.getElementById("count").innerText = cart.length;
+  document.getElementById("total").innerText = total;
+
+  let list = document.getElementById("list");
+  list.innerHTML = "";
+
+  cart.forEach(i => {
+    let li = document.createElement("li");
+    li.textContent = i.name + " - $" + i.price;
+    list.appendChild(li);
+  });
+}
+
+function pay() {
+  if(cart.length === 0){
+    alert("Carrito vacío 💔");
+    return;
   }
 
-  function actualizar() {
-    document.getElementById("count").innerText = carrito.length;
-
-    let lista = document.getElementById("lista");
-    lista.innerHTML = "";
-
-    carrito.forEach((item) => {
-      let li = document.createElement("li");
-      li.textContent = item;
-      lista.appendChild(li);
-    });
-  }
-
-  function vaciar() {
-    carrito = [];
-    actualizar();
-  }
+  alert("Pago exitoso 💳✨ Total: $" + total);
+  cart = [];
+  total = 0;
+  render();
+}
 </script>
 
 </body>
