@@ -1,165 +1,411 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Lilith Bloms</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+
 <style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#fff7fb;
+
+:root{
+
+  --pink:#f7c6d9;
+
+  --pink2:#fde7ef;
+
+  --gold:#e6c78a;
+
+  --cream:#fffaf5;
+
+  --text:#4a4a4a;
+
 }
 
-header{
-  background:linear-gradient(135deg,#ff4d8d,#d4af37);
-  color:white;
-  text-align:center;
-  padding:15px;
-  font-weight:bold;
+body{
+
+  margin:0;
+
+  font-family:Arial;
+
+  background:var(--cream);
+
+  color:var(--text);
+
 }
+
+/* HERO / HOME */
+
+.hero{
+
+  height:85vh;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  align-items:center;
+
+  text-align:center;
+
+  background:linear-gradient(135deg,var(--pink2),#fff);
+
+  padding:20px;
+
+}
+
+.hero h1{
+
+  font-family:'Playfair Display';
+
+  font-size:42px;
+
+  margin:0;
+
+  color:#6b4e57;
+
+}
+
+.hero p{
+
+  max-width:320px;
+
+  color:#7a6a70;
+
+}
+
+.hero button{
+
+  margin-top:15px;
+
+  padding:12px 20px;
+
+  border:none;
+
+  border-radius:30px;
+
+  background:linear-gradient(135deg,var(--pink),var(--gold));
+
+  color:white;
+
+  font-weight:bold;
+
+}
+
+/* SECTION TITLE */
+
+.section-title{
+
+  text-align:center;
+
+  margin:20px 0 5px;
+
+  font-family:'Playfair Display';
+
+  color:#6b4e57;
+
+}
+
+/* PRODUCTS */
 
 .container{
+
   display:grid;
+
   grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  padding:10px;
+
+  gap:12px;
+
+  padding:12px;
+
 }
 
 .card{
+
   background:white;
-  border-radius:14px;
+
+  border-radius:18px;
+
   overflow:hidden;
-  box-shadow:0 5px 12px rgba(0,0,0,0.1);
+
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+
 }
 
 .card img{
+
   width:100%;
-  height:110px;
+
+  height:120px;
+
   object-fit:cover;
+
 }
 
 .card h3{
-  font-size:13px;
-  margin:6px;
+
+  font-size:12px;
+
+  margin:8px;
+
 }
 
 .card p{
-  margin:6px;
-  color:#666;
+
+  margin:6px 8px;
+
+  color:#888;
+
 }
 
 .card button{
+
   width:100%;
+
   padding:10px;
+
   border:none;
-  background:#ff4d8d;
+
+  background:var(--pink);
+
   color:white;
+
   font-weight:bold;
+
 }
 
+/* CART */
+
 .cart-btn{
+
   position:fixed;
+
   bottom:18px;
+
   right:18px;
-  background:#d4af37;
+
+  background:var(--gold);
+
+  color:#3a2f2f;
+
   padding:14px;
+
   border-radius:50px;
+
   font-weight:bold;
+
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+
 }
 
 .panel{
+
   position:fixed;
+
   bottom:0;
+
   left:0;
+
   right:0;
+
   background:white;
+
   border-radius:20px 20px 0 0;
+
   max-height:70%;
+
   overflow:auto;
+
   display:none;
+
   padding:12px;
+
 }
 
 .item{
+
   display:flex;
+
   justify-content:space-between;
+
   padding:8px;
-  border-bottom:1px solid #eee;
+
+  border-bottom:1px solid #f2f2f2;
+
 }
 
 .total{
+
   text-align:center;
+
   font-weight:bold;
+
   margin-top:10px;
+
 }
 
 .checkout{
+
   display:block;
+
   text-align:center;
+
   margin-top:10px;
+
   padding:12px;
-  background:#d4af37;
-  color:black;
+
+  background:linear-gradient(135deg,var(--pink),var(--gold));
+
+  color:white;
+
   font-weight:bold;
+
   text-decoration:none;
-  border-radius:10px;
+
+  border-radius:14px;
+
 }
+
 </style>
+
 </head>
 
 <body>
 
-<header>
-🌸 Lilith Bloms — Flores de Limpiapipas 💖✨
-</header>
+<!-- HERO / HOME -->
 
-<div class="container" id="grid"></div>
+<div class="hero">
+
+  <h1>🌸 Lilith Bloms</h1>
+
+  <p>Flores de limpiapipas hechas a mano con amor, estilo pastel y elegancia dorada 💖✨</p>
+
+  <button onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">
+
+    Ver colección
+
+  </button>
+
+</div>
+
+<h2 class="section-title">💛 Colección de flores</h2>
+
+<div class="container" id="shop"></div>
 
 <div class="cart-btn" onclick="toggleCart()">
+
 🛒 <span id="count">0</span>
+
 </div>
 
 <div class="panel" id="panel">
+
 <h3>Tu carrito</h3>
+
 <div id="cart"></div>
+
 <div class="total" id="total"></div>
+
 <a class="checkout" id="wa" target="_blank">Enviar pedido</a>
+
 </div>
 
 <script>
 
+/* 🌸 20 PRODUCTOS */
+
 const products = [
-  {name:"Rosas rosadas", price:350},
-  {name:"Girasol dorado", price:450},
-  {name:"Bouquet premium", price:600},
-  {name:"Caja deluxe", price:800}
+
+  {name:"Rosa pastel clásica", price:350},
+
+  {name:"Girasol dorado suave", price:450},
+
+  {name:"Tulipán romántico", price:400},
+
+  {name:"Bouquet Lilith deluxe", price:800},
+
+  {name:"Caja floral premium", price:900},
+
+  {name:"Ramo rosa bebé", price:300},
+
+  {name:"Flor corazón especial", price:380},
+
+  {name:"Orquídea artesanal", price:700},
+
+  {name:"Margarita pastel", price:320},
+
+  {name:"Lirio elegante", price:650},
+
+  {name:"Ramo edición oro", price:950},
+
+  {name:"Flor minimal blanca", price:280},
+
+  {name:"Bouquet romántico grande", price:850},
+
+  {name:"Rosa doble premium", price:500},
+
+  {name:"Flor glitter gold", price:420},
+
+  {name:"Ramo sweet pastel", price:600},
+
+  {name:"Caja sorpresa floral", price:750},
+
+  {name:"Flor estrella Lilith", price:390},
+
+  {name:"Bouquet luxury pink", price:980},
+
+  {name:"Ramo personalizado", price:550}
+
 ];
 
 let cart = [];
 
+/* RENDER */
+
 function render(){
-  const grid = document.getElementById("grid");
+
+  const grid = document.getElementById("shop");
+
   grid.innerHTML="";
 
   products.forEach((p,i)=>{
+
     grid.innerHTML += `
+
       <div class="card">
-        <img src="https://source.unsplash.com/300x200/?flowers" />
+
+        <img src="https://source.unsplash.com/300x200/?flowers,pastel" />
+
         <h3>${p.name}</h3>
+
         <p>RD$ ${p.price}</p>
+
         <button onclick="add(${i})">Agregar</button>
+
       </div>
+
     `;
+
   });
 
   update();
+
 }
 
 function add(i){
+
   cart.push(products[i]);
+
   update();
+
 }
 
 function update(){
@@ -167,36 +413,53 @@ function update(){
   document.getElementById("count").innerText = cart.length;
 
   let html = "";
+
   let total = 0;
 
   cart.forEach(c=>{
+
     total += c.price;
+
     html += `
+
       <div class="item">
+
         <span>${c.name}</span>
+
         <span>RD$${c.price}</span>
+
       </div>
+
     `;
+
   });
 
   document.getElementById("cart").innerHTML = html;
+
   document.getElementById("total").innerText = "Total: RD$ " + total;
 
   let msg = "Hola quiero pedido Lilith Bloms:%0A";
 
   cart.forEach(c=>{
+
     msg += "- "+c.name+" RD$"+c.price+"%0A";
+
   });
 
   msg += "%0ATotal: RD$"+total;
 
   document.getElementById("wa").href =
+
     "https://wa.me/18091234567?text="+msg;
+
 }
 
 function toggleCart(){
+
   const panel = document.getElementById("panel");
+
   panel.style.display = panel.style.display==="block"?"none":"block";
+
 }
 
 render();
@@ -204,4 +467,5 @@ render();
 </script>
 
 </body>
-</html>
+
+</html
