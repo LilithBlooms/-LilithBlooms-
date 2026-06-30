@@ -1,471 +1,179 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lilith Bloms | Business</title>
 
-<title>Lilith Bloms</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-:root{
-
-  --pink:#f7c6d9;
-
-  --pink2:#fde7ef;
-
-  --gold:#e6c78a;
-
-  --cream:#fffaf5;
-
-  --text:#4a4a4a;
-
-}
-
 body{
-
   margin:0;
-
   font-family:Arial;
-
-  background:var(--cream);
-
-  color:var(--text);
-
+  background:#fffaf5;
 }
 
-/* HERO / HOME */
-
-.hero{
-
-  height:85vh;
-
-  display:flex;
-
-  flex-direction:column;
-
-  justify-content:center;
-
-  align-items:center;
-
+header{
+  padding:15px;
   text-align:center;
-
-  background:linear-gradient(135deg,var(--pink2),#fff);
-
-  padding:20px;
-
-}
-
-.hero h1{
-
-  font-family:'Playfair Display';
-
-  font-size:42px;
-
-  margin:0;
-
-  color:#6b4e57;
-
-}
-
-.hero p{
-
-  max-width:320px;
-
-  color:#7a6a70;
-
-}
-
-.hero button{
-
-  margin-top:15px;
-
-  padding:12px 20px;
-
-  border:none;
-
-  border-radius:30px;
-
-  background:linear-gradient(135deg,var(--pink),var(--gold));
-
+  background:linear-gradient(135deg,#f7c6d9,#e6c78a);
   color:white;
-
   font-weight:bold;
-
 }
 
-/* SECTION TITLE */
-
-.section-title{
-
-  text-align:center;
-
-  margin:20px 0 5px;
-
-  font-family:'Playfair Display';
-
-  color:#6b4e57;
-
-}
-
-/* PRODUCTS */
-
-.container{
-
+.grid{
   display:grid;
-
   grid-template-columns:repeat(2,1fr);
-
-  gap:12px;
-
-  padding:12px;
-
+  gap:10px;
+  padding:10px;
 }
 
 .card{
-
   background:white;
-
-  border-radius:18px;
-
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
   overflow:hidden;
-
-  box-shadow:0 6px 18px rgba(0,0,0,0.06);
-
 }
 
 .card img{
-
   width:100%;
-
   height:120px;
-
   object-fit:cover;
-
 }
 
 .card h3{
-
-  font-size:12px;
-
-  margin:8px;
-
+  font-size:13px;
+  margin:6px;
 }
 
 .card p{
-
-  margin:6px 8px;
-
-  color:#888;
-
+  margin:6px;
+  color:#777;
 }
 
-.card button{
-
+button{
   width:100%;
-
   padding:10px;
-
   border:none;
-
-  background:var(--pink);
-
+  background:#f7c6d9;
   color:white;
-
   font-weight:bold;
-
 }
 
-/* CART */
-
-.cart-btn{
-
+.cart{
   position:fixed;
-
-  bottom:18px;
-
-  right:18px;
-
-  background:var(--gold);
-
-  color:#3a2f2f;
-
-  padding:14px;
-
+  bottom:15px;
+  right:15px;
+  background:#e6c78a;
+  padding:12px;
   border-radius:50px;
-
   font-weight:bold;
-
-  box-shadow:0 6px 18px rgba(0,0,0,0.15);
-
 }
 
 .panel{
-
   position:fixed;
-
   bottom:0;
-
   left:0;
-
   right:0;
-
   background:white;
-
-  border-radius:20px 20px 0 0;
-
-  max-height:70%;
-
-  overflow:auto;
-
   display:none;
-
   padding:12px;
-
+  border-radius:20px 20px 0 0;
+  max-height:60%;
+  overflow:auto;
 }
-
-.item{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  padding:8px;
-
-  border-bottom:1px solid #f2f2f2;
-
-}
-
-.total{
-
-  text-align:center;
-
-  font-weight:bold;
-
-  margin-top:10px;
-
-}
-
-.checkout{
-
-  display:block;
-
-  text-align:center;
-
-  margin-top:10px;
-
-  padding:12px;
-
-  background:linear-gradient(135deg,var(--pink),var(--gold));
-
-  color:white;
-
-  font-weight:bold;
-
-  text-decoration:none;
-
-  border-radius:14px;
-
-}
-
 </style>
-
 </head>
 
 <body>
 
-<!-- HERO / HOME -->
+<header>🌸 Lilith Bloms Business</header>
 
-<div class="hero">
+<div class="grid" id="grid"></div>
 
-  <h1>🌸 Lilith Bloms</h1>
-
-  <p>Flores de limpiapipas hechas a mano con amor, estilo pastel y elegancia dorada 💖✨</p>
-
-  <button onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">
-
-    Ver colección
-
-  </button>
-
-</div>
-
-<h2 class="section-title">💛 Colección de flores</h2>
-
-<div class="container" id="shop"></div>
-
-<div class="cart-btn" onclick="toggleCart()">
-
-🛒 <span id="count">0</span>
-
-</div>
+<div class="cart" onclick="toggle()">🛒 <span id="count">0</span></div>
 
 <div class="panel" id="panel">
-
-<h3>Tu carrito</h3>
-
-<div id="cart"></div>
-
-<div class="total" id="total"></div>
-
-<a class="checkout" id="wa" target="_blank">Enviar pedido</a>
-
+  <h3>Pedidos</h3>
+  <div id="cart"></div>
+  <p id="total"></p>
+  <button onclick="sendOrder()">Enviar pedido</button>
 </div>
 
 <script>
 
-/* 🌸 20 PRODUCTOS */
+// 🔐 SUPABASE CONFIG
+const supabaseUrl = "TU_URL";
+const supabaseKey = "TU_KEY";
 
-const products = [
-
-  {name:"Rosa pastel clásica", price:350},
-
-  {name:"Girasol dorado suave", price:450},
-
-  {name:"Tulipán romántico", price:400},
-
-  {name:"Bouquet Lilith deluxe", price:800},
-
-  {name:"Caja floral premium", price:900},
-
-  {name:"Ramo rosa bebé", price:300},
-
-  {name:"Flor corazón especial", price:380},
-
-  {name:"Orquídea artesanal", price:700},
-
-  {name:"Margarita pastel", price:320},
-
-  {name:"Lirio elegante", price:650},
-
-  {name:"Ramo edición oro", price:950},
-
-  {name:"Flor minimal blanca", price:280},
-
-  {name:"Bouquet romántico grande", price:850},
-
-  {name:"Rosa doble premium", price:500},
-
-  {name:"Flor glitter gold", price:420},
-
-  {name:"Ramo sweet pastel", price:600},
-
-  {name:"Caja sorpresa floral", price:750},
-
-  {name:"Flor estrella Lilith", price:390},
-
-  {name:"Bouquet luxury pink", price:980},
-
-  {name:"Ramo personalizado", price:550}
-
-];
+const client = supabase.createClient(supabaseUrl, supabaseKey);
 
 let cart = [];
+let products = [];
 
-/* RENDER */
+// 📦 CARGAR PRODUCTOS REALES
+async function loadProducts(){
+  let { data } = await client.from("products").select("*");
+  products = data;
 
-function render(){
-
-  const grid = document.getElementById("shop");
-
-  grid.innerHTML="";
+  let grid = document.getElementById("grid");
+  grid.innerHTML = "";
 
   products.forEach((p,i)=>{
-
     grid.innerHTML += `
-
       <div class="card">
-
-        <img src="https://source.unsplash.com/300x200/?flowers,pastel" />
-
+        <img src="${p.image || 'https://source.unsplash.com/300x200/?flowers'}">
         <h3>${p.name}</h3>
-
         <p>RD$ ${p.price}</p>
-
         <button onclick="add(${i})">Agregar</button>
-
       </div>
-
     `;
-
   });
-
-  update();
-
 }
 
 function add(i){
-
   cart.push(products[i]);
-
-  update();
-
+  document.getElementById("count").innerText = cart.length;
+  updateCart();
 }
 
-function update(){
-
-  document.getElementById("count").innerText = cart.length;
-
+function updateCart(){
   let html = "";
-
   let total = 0;
 
   cart.forEach(c=>{
-
     total += c.price;
-
-    html += `
-
-      <div class="item">
-
-        <span>${c.name}</span>
-
-        <span>RD$${c.price}</span>
-
-      </div>
-
-    `;
-
+    html += `<p>${c.name} - RD$${c.price}</p>`;
   });
 
   document.getElementById("cart").innerHTML = html;
-
-  document.getElementById("total").innerText = "Total: RD$ " + total;
-
-  let msg = "Hola quiero pedido Lilith Bloms:%0A";
-
-  cart.forEach(c=>{
-
-    msg += "- "+c.name+" RD$"+c.price+"%0A";
-
-  });
-
-  msg += "%0ATotal: RD$"+total;
-
-  document.getElementById("wa").href =
-
-    "https://wa.me/18091234567?text="+msg;
-
+  document.getElementById("total").innerText = "Total: RD$ "+total;
 }
 
-function toggleCart(){
+async function sendOrder(){
+  let total = cart.reduce((a,b)=>a+b.price,0);
 
-  const panel = document.getElementById("panel");
+  await client.from("orders").insert([
+    {
+      items: JSON.stringify(cart),
+      total: total
+    }
+  ]);
 
-  panel.style.display = panel.style.display==="block"?"none":"block";
-
+  alert("Pedido enviado 💖");
+  cart = [];
+  updateCart();
 }
 
-render();
+function toggle(){
+  let p = document.getElementById("panel");
+  p.style.display = p.style.display==="block"?"none":"block";
+}
+
+loadProducts();
 
 </script>
 
 </body>
-
-</html
+</html>
